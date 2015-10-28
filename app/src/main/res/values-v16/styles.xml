@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Value" parent="@android:style/TextAppearance.Medium">
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+</resources>
