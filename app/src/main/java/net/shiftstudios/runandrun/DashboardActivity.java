@@ -43,7 +43,7 @@ public class DashboardActivity extends AppCompatActivity
 
     public Speedometer speedometer;
 
-    private List<UsbSerialPort> mEntries = new ArrayList<UsbSerialPort>();
+    private List<UsbSerialPort> mEntries = new ArrayList<>();
 
     private UsbManager mUsbManager;
     private static UsbSerialPort sPort = null;
@@ -83,7 +83,7 @@ public class DashboardActivity extends AppCompatActivity
 
                 try {
                     updateReceivedData(buffer);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
 
                 Thread.sleep(100);
@@ -159,37 +159,22 @@ public class DashboardActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.dashboard, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_mail) {
-            // Handle the camera action
-        } else if (id == R.id.nav_dashboard) {
-
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -208,7 +193,7 @@ public class DashboardActivity extends AppCompatActivity
                 UsbSerialProber prober = new UsbSerialProber(customTable);
                 final List<UsbSerialDriver> drivers = prober.findAllDrivers(mUsbManager);
 
-                final List<UsbSerialPort> result = new ArrayList<UsbSerialPort>();
+                final List<UsbSerialPort> result = new ArrayList<>();
                 for (final UsbSerialDriver driver : drivers) {
                     final List<UsbSerialPort> ports = driver.getPorts();
 
@@ -258,8 +243,7 @@ public class DashboardActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "Resumed, port=" + sPort);
-        if (sPort == null) {
-        } else {
+        if (sPort != null) {
             startIoManager();
         }
         onDeviceStateChange();
@@ -290,7 +274,6 @@ public class DashboardActivity extends AppCompatActivity
                     // Ignore.
                 }
                 sPort = null;
-                return;
             }
         } else {
             Log.d(TAG, "Port null ??");
@@ -302,7 +285,7 @@ public class DashboardActivity extends AppCompatActivity
     }
 
     private void updateReceivedData(byte[] bytedata) {
-        final String message = new String(bytedata, 0, bytedata.length).replaceAll("[^(\\p{Digit}|\\p{Punct})]", "");;
+        final String message = new String(bytedata, 0, bytedata.length).replaceAll("[^(\\p{Digit}|\\p{Punct})]", "");
 
         if (message.length() != 0) {
             tempData += message;
